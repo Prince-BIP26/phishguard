@@ -1,0 +1,265 @@
+/* ── Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --bg:          hsl(220,20%,7%);
+  --fg:          hsl(160,30%,90%);
+  --card:        hsl(220,18%,10%);
+  --primary:     hsl(160,100%,45%);
+  --primary-fg:  hsl(220,20%,7%);
+  --muted:       hsl(220,15%,15%);
+  --muted-fg:    hsl(220,10%,55%);
+  --border:      hsl(160,30%,18%);
+  --safe:        hsl(160,100%,45%);
+  --warning:     hsl(35,100%,55%);
+  --danger:      hsl(0,80%,55%);
+  --radius:      8px;
+}
+
+/* ── Reset / Base ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    hsl(160 100% 45% / .03) 2px, hsl(160 100% 45% / .03) 4px
+  );
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+.container    { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+.main-content { padding: 40px 16px; }
+.mt-section   { margin-top: 48px; }
+
+/* ── Header ────────────────────────────────────────────────────────────── */
+.header       { border-bottom: 1px solid var(--border); padding: 20px 0; }
+.header-inner { display:flex; align-items:center; gap:12px; }
+.header-logo  { display:flex; align-items:center; gap:12px; }
+.logo-icon    { font-size:24px; padding:8px; background:hsl(160 100% 45%/.1);
+                border:1px solid hsl(160 100% 45%/.2); border-radius:8px; }
+.logo-title   { font-family:'JetBrains Mono',monospace; font-size:16px;
+                font-weight:700; color:var(--fg); }
+.logo-sub     { font-family:'JetBrains Mono',monospace; font-size:11px;
+                color:var(--muted-fg); }
+.header-version { margin-left:auto; font-family:'JetBrains Mono',monospace;
+                  font-size:11px; color:hsl(160 100% 45%/.6); }
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.hero       { text-align:center; margin-bottom:40px; }
+.hero-label { font-family:'JetBrains Mono',monospace; font-size:10px;
+              color:var(--primary); letter-spacing:.15em; text-transform:uppercase; margin-bottom:8px; }
+.hero-title { font-family:'JetBrains Mono',monospace; font-size:clamp(20px,4vw,28px);
+              font-weight:700; margin-bottom:10px; }
+.hero-desc  { font-size:13px; color:var(--muted-fg); max-width:520px; margin:0 auto; line-height:1.6; }
+
+/* ── Cards ─────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.glow-green { box-shadow: 0 0 20px hsl(160 100% 45%/.15), 0 0 60px hsl(160 100% 45%/.05); }
+.glow-red   { box-shadow: 0 0 20px hsl(0 80% 55%/.2),   0 0 60px hsl(0 80% 55%/.08);   border-color:hsl(0 80% 55%/.3)!important; }
+.glow-amber { box-shadow: 0 0 20px hsl(35 100% 55%/.2), 0 0 60px hsl(35 100% 55%/.08); border-color:hsl(35 100% 55%/.3)!important; }
+
+/* ── Section heading ───────────────────────────────────────────────────── */
+.section-heading { display:flex; align-items:center; gap:8px; margin-bottom:20px; }
+.label-primary   { font-family:'JetBrains Mono',monospace; font-size:11px;
+                   color:var(--primary); text-transform:uppercase; letter-spacing:.08em; }
+
+/* ── Scanner inputs ────────────────────────────────────────────────────── */
+.scanner-section { margin-bottom: 0; }
+.input-row   { display:flex; gap:10px; }
+.main-input  {
+  flex:1; background:var(--muted); border:1px solid var(--border);
+  border-radius:6px; padding:12px 16px; font-family:'JetBrains Mono',monospace;
+  font-size:12px; color:var(--fg); outline:none;
+  transition: border-color .2s;
+}
+.main-input:focus  { border-color: hsl(160 100% 45%/.5); }
+.main-input::placeholder { color: var(--muted-fg); }
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.btn-primary {
+  background:var(--primary); color:var(--primary-fg);
+  border:none; border-radius:6px; padding:12px 20px;
+  font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+  cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+  transition: opacity .2s;
+  white-space: nowrap;
+}
+.btn-primary:hover   { opacity:.9; }
+.btn-primary:disabled{ opacity:.4; cursor:default; }
+
+.btn-secondary {
+  background:hsl(160 100% 45%/.1); color:var(--primary);
+  border:1px solid hsl(160 100% 45%/.2); border-radius:6px;
+  padding:8px 14px; font-family:'JetBrains Mono',monospace; font-size:11px;
+  cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+  transition: background .2s;
+}
+.btn-secondary:hover { background:hsl(160 100% 45%/.2); }
+
+.btn-pie {
+  background:hsl(160 100% 45%/.08); color:var(--primary);
+  border:1px solid hsl(160 100% 45%/.2); border-radius:6px;
+  padding:6px 10px; font-family:'JetBrains Mono',monospace; font-size:10px;
+  cursor:pointer; transition: background .2s; margin-bottom:12px;
+}
+.btn-pie:hover { background:hsl(160 100% 45%/.18); }
+
+.btn-icon {
+  background:var(--primary); color:var(--primary-fg);
+  border:none; border-radius:6px; padding:8px 10px;
+  cursor:pointer; font-size:12px; transition:opacity .2s;
+}
+.btn-icon:hover { opacity:.9; }
+
+.close-btn {
+  background:none; border:none; color:var(--muted-fg);
+  cursor:pointer; padding:4px; border-radius:4px; font-size:13px;
+  transition:background .15s;
+}
+.close-btn:hover { background:var(--muted); }
+
+/* ── Detected type ─────────────────────────────────────────────────────── */
+.detected-type {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  color:var(--muted-fg); margin-top:8px;
+}
+.label-primary-text { color:var(--primary); font-weight:600; }
+
+/* ── Live preview ──────────────────────────────────────────────────────── */
+.live-preview {
+  margin-top:12px; background:hsl(220 15% 15%/.6);
+  border:1px solid var(--border); border-radius:6px; padding:12px;
+}
+.live-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.live-left   { display:flex; align-items:center; gap:8px; }
+.live-class  { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; }
+.live-score  { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; }
+.muted-sm    { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted-fg); }
+
+/* ── Risk bar ──────────────────────────────────────────────────────────── */
+.risk-bar-bg { background:var(--muted); border-radius:99px; height:8px; }
+.risk-bar    { height:8px; border-radius:99px; transition:width .5s; }
+.bar-safe    { background:var(--safe); }
+.bar-warning { background:var(--warning); }
+.bar-danger  { background:var(--danger); }
+
+/* ── Triggered tags ────────────────────────────────────────────────────── */
+.triggered-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.tag-danger {
+  background:hsl(0 80% 55%/.1); color:var(--danger);
+  border:1px solid hsl(0 80% 55%/.2); border-radius:4px;
+  font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px;
+}
+
+/* ── Scanning animation ────────────────────────────────────────────────── */
+.scanning-card { margin-top:20px; position:relative; overflow:hidden; }
+.scan-overlay  { position:absolute; inset:0; opacity:.5;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,hsl(160 100% 45%/.03) 2px,hsl(160 100% 45%/.03) 4px); }
+.scanning-text { text-align:center; font-family:'JetBrains Mono',monospace;
+                 font-size:13px; color:var(--primary);
+                 animation:pulseGlow 2s ease-in-out infinite; }
+@keyframes pulseGlow { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+/* ── Results ───────────────────────────────────────────────────────────── */
+.result-card  { margin-top:20px; }
+.type-badge   { display:inline-block; background:hsl(160 100% 45%/.1); color:var(--primary);
+                border:1px solid hsl(160 100% 45%/.2); border-radius:99px;
+                font-family:'JetBrains Mono',monospace; font-size:10px;
+                padding:3px 12px; margin-bottom:14px; }
+.result-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.result-left  { display:flex; align-items:center; gap:12px; }
+.result-icon  { font-size:28px; }
+.result-class { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; }
+.result-right { text-align:right; }
+.result-score { font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; }
+
+.analyzed-input {
+  background:var(--muted); border-radius:6px; padding:12px; margin-bottom:20px;
+}
+.mono-sm      { font-family:'JetBrains Mono',monospace; font-size:12px; }
+.mono-bold    { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; }
+.break-all    { word-break:break-all; }
+
+/* ── Rules ─────────────────────────────────────────────────────────────── */
+.rules-heading { margin-bottom:10px; }
+.rules-list    { display:flex; flex-direction:column; gap:8px; }
+.rule-item {
+  display:flex; gap:12px; padding:12px;
+  border-radius:6px; border:1px solid;
+}
+.rule-triggered { border-color:hsl(0 80% 55%/.2); background:hsl(0 80% 55%/.05); }
+.rule-passed    { border-color:var(--border); background:hsl(220 15% 15%/.3); }
+.rule-icon      { margin-top:2px; font-size:14px; flex-shrink:0; }
+.rule-name      { font-size:13px; font-weight:600; }
+.rule-weight    { font-size:11px; color:var(--muted-fg); font-weight:normal; margin-left:6px; }
+.rule-desc      { font-size:11px; color:var(--muted-fg); margin-top:3px; }
+.color-safe     { color:var(--safe); }
+.color-danger   { color:var(--danger); }
+.color-warning  { color:var(--warning); }
+
+/* ── Charts ────────────────────────────────────────────────────────────── */
+.chart-header { display:flex; justify-content:space-between; align-items:flex-start;
+                margin-bottom:14px; }
+.pie-section  { background:hsl(220 15% 15%/.5); border:1px solid var(--border);
+                border-radius:8px; padding:14px; margin-bottom:12px; }
+
+/* ── Phishing type cards ───────────────────────────────────────────────── */
+.cards-grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
+.type-card  {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:20px;
+  display:flex; flex-direction:column;
+  transition: border-color .2s;
+}
+.type-card:hover { border-color:hsl(160 100% 45%/.3); }
+.type-icon  { font-size:28px; margin-bottom:10px; }
+.type-name  { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+              margin-bottom:6px; transition:color .2s; }
+.type-card:hover .type-name { color:var(--primary); }
+.type-desc  { font-size:11px; color:var(--muted-fg); line-height:1.5; margin-bottom:8px; }
+.example-box{
+  background:var(--muted); border-radius:5px; padding:8px 10px;
+  font-size:11px; margin-bottom:8px; line-height:1.4; word-break:break-all;
+}
+.warning-text   { color:var(--warning); font-weight:600; }
+.safe-text      { color:var(--safe); font-weight:600; }
+.prevention-text{ font-size:11px; margin-bottom:10px; line-height:1.4; }
+
+.card-input-row { display:flex; gap:8px; margin-top:auto; padding-top:12px;
+                  border-top:1px solid var(--border); }
+.type-input {
+  flex:1; min-width:0; background:var(--muted); border:1px solid var(--border);
+  border-radius:5px; padding:7px 10px; font-family:'JetBrains Mono',monospace;
+  font-size:10px; color:var(--fg); outline:none; transition:border-color .2s;
+}
+.type-input:focus { border-color:hsl(160 100% 45%/.5); }
+.type-input::placeholder { color:var(--muted-fg); }
+
+.type-result { margin-top:8px; display:flex; align-items:center; gap:6px; }
+
+/* ── Report card ───────────────────────────────────────────────────────── */
+.report-card {
+  margin-top:36px;
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  flex-wrap:wrap;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.footer {
+  margin-top:60px; padding-top:20px; border-top:1px solid var(--border);
+  text-align:center; font-family:'JetBrains Mono',monospace;
+  font-size:10px; color:var(--muted-fg);
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }

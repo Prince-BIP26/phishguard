@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhishGuard — Rule-Based Phishing Detection Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ── Header ─────────────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-logo">
+      <div class="logo-icon">🛡️</div>
+      <div>
+        <div class="logo-title">PhishGuard</div>
+        <div class="logo-sub">Rule-Based Phishing Detection Tool</div>
+      </div>
+    </div>
+    <div class="header-version">⟩ v1.0</div>
+  </div>
+</header>
+
+<!-- ── Main ───────────────────────────────────────────────────────────────── -->
+<main class="container main-content">
+
+  <!-- Hero -->
+  <div class="hero">
+    <p class="hero-label">Cybersecurity Project</p>
+    <h2 class="hero-title">Detect Phishing Threats Instantly</h2>
+    <p class="hero-desc">
+      Paste any URL, email address, domain, or SMS message below.
+      The tool auto-detects the threat type, analyzes it against security rules,
+      and classifies it as Legitimate, Suspicious, or Phishing.
+    </p>
+  </div>
+
+  <!-- ── Universal Scanner ──────────────────────────────────────────────── -->
+  <section class="card glow-green scanner-section">
+    <div class="section-heading">
+      <span>🛡️</span>
+      <span class="label-primary">Universal Threat Scanner</span>
+    </div>
+
+    <div class="input-row">
+      <input id="mainInput" type="text"
+        placeholder="Enter URL, email, domain, or SMS message to analyze..."
+        class="main-input" autocomplete="off" />
+      <button id="analyzeBtn" class="btn-primary" onclick="runAnalysis()">
+        🔍 Analyze
+      </button>
+    </div>
+
+    <p id="detectedType" class="detected-type" style="display:none">
+      Auto-detected type: <span id="detectedLabel" class="label-primary-text"></span>
+    </p>
+
+    <!-- Live Preview -->
+    <div id="livePreview" class="live-preview" style="display:none">
+      <div class="live-header">
+        <div class="live-left">
+          <span id="liveIcon"></span>
+          <span id="liveClass" class="live-class"></span>
+          <span id="liveTypeLabel" class="muted-sm"></span>
+        </div>
+        <span id="liveScore" class="live-score"></span>
+      </div>
+      <div class="risk-bar-bg"><div id="liveBar" class="risk-bar"></div></div>
+      <div id="liveTriggered" class="triggered-tags"></div>
+      <p class="muted-sm" style="margin-top:6px">Press Enter or click Analyze for full report</p>
+    </div>
+  </section>
+
+  <!-- Scanning animation -->
+  <div id="scanningAnim" class="card scanning-card" style="display:none">
+    <div class="scan-overlay"></div>
+    <p id="scanningText" class="scanning-text">⟫ Analyzing...</p>
+  </div>
+
+  <!-- Results -->
+  <div id="results" class="card result-card" style="display:none">
+    <span id="resultTypeBadge" class="type-badge"></span>
+
+    <div class="result-header">
+      <div class="result-left">
+        <span id="resultIcon" class="result-icon"></span>
+        <div>
+          <div id="resultClass" class="result-class"></div>
+          <div id="resultTime" class="muted-sm"></div>
+        </div>
+      </div>
+      <div class="result-right">
+        <div id="resultScore" class="result-score"></div>
+        <div class="muted-sm">Risk Score</div>
+      </div>
+    </div>
+
+    <div class="risk-bar-bg" style="margin-bottom:24px">
+      <div id="resultBar" class="risk-bar" style="transition: width .7s"></div>
+    </div>
+
+    <div class="analyzed-input">
+      <div class="muted-sm" style="margin-bottom:4px">Analyzed Input:</div>
+      <div id="resultUrl" class="mono-sm break-all"></div>
+    </div>
+
+    <!-- Bar chart toggle -->
+    <button class="btn-secondary" onclick="toggleBarChart()" id="barChartBtn" style="margin-bottom:16px">
+      📊 View Threat Stats (2022–2024)
+    </button>
+
+    <div id="barChartSection" style="display:none">
+      <div class="chart-header">
+        <div>
+          <div class="label-primary" style="font-size:12px">Phishing Threats Overview (2022–2024)</div>
+          <div class="muted-sm">Reported incidents in thousands — all 5 phishing types compared</div>
+        </div>
+        <button onclick="toggleBarChart()" class="close-btn">✕</button>
+      </div>
+      <canvas id="barChart" height="120"></canvas>
+    </div>
+
+    <div class="rules-heading label-primary" id="rulesLabel"></div>
+    <div id="rulesList" class="rules-list"></div>
+  </div>
+
+  <!-- ── Phishing Type Cards ─────────────────────────────────────────────── -->
+  <section class="mt-section">
+    <div class="section-heading">
+      <span>🛡️</span>
+      <span class="label-primary">5 Types of Phishing Attacks — Test Each One</span>
+    </div>
+    <div class="cards-grid">
+      {% for t in phishing_types %}
+      <div class="type-card" id="card-{{ t.id }}">
+        <div class="type-icon">{{ t.icon }}</div>
+        <div class="type-name">{{ t.name }}</div>
+        <p class="type-desc">{{ t.description }}</p>
+        <div class="example-box">
+          <span class="warning-text">Example: </span>{{ t.example }}
+        </div>
+        <p class="prevention-text"><span class="safe-text">Prevention: </span>{{ t.prevention }}</p>
+
+        <!-- Pie chart toggle -->
+        <button class="btn-pie" onclick="togglePie({{ t.id }}, '{{ t.threatType }}')">
+          🥧 <span id="pie-label-{{ t.id }}">View Stats</span>
+        </button>
+        <div id="pie-section-{{ t.id }}" style="display:none" class="pie-section">
+          <div class="chart-header">
+            <div>
+              <div class="label-primary" style="font-size:11px">{{ t.name }} — Attack Breakdown</div>
+              <div class="muted-sm">Distribution of sub-attack types (2022–2024 combined)</div>
+            </div>
+            <button onclick="togglePie({{ t.id }}, '{{ t.threatType }}')" class="close-btn">✕</button>
+          </div>
+          <canvas id="pieChart-{{ t.id }}" height="220"></canvas>
+        </div>
+
+        <!-- Per-type input -->
+        <div class="card-input-row">
+          <input type="text" id="typeInput-{{ t.id }}"
+            placeholder="{{ t.placeholder }}"
+            class="type-input"
+            onkeydown="if(event.key==='Enter') analyzeByType({{ t.id }}, '{{ t.threatType }}')" />
+          <button class="btn-icon" onclick="analyzeByType({{ t.id }}, '{{ t.threatType }}')">🔍</button>
+        </div>
+        <div id="typeResult-{{ t.id }}" class="type-result" style="display:none"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ── Project Report ─────────────────────────────────────────────────── -->
+  <div class="report-card card">
+    <div>
+      <div class="mono-bold">Project Report</div>
+      <div class="muted-sm" style="margin-top:4px">Download a complete project report with architecture, rules & analysis details.</div>
+    </div>
+    <a href="/report" class="btn-primary" style="text-decoration:none">⬇ Download Report</a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    Built as a student cybersecurity project • Rule-based analysis • No data is sent to any server
+  </footer>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
